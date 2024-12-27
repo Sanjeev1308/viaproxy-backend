@@ -49,12 +49,22 @@ export const loginUser = async (data: any) => {
     throw new ForbiddenError('Invalid credentials', ErrorCode.FORBIDDEN);
 
   // Generate and store access token
-  const accessToken = signJwt({ userId: user._id }, secretKey as string, {
-    expiresIn: '3d',
-  });
+  const accessToken = signJwt(
+    {
+      userId: user._id,
+      role: user.role,
+      email: user.email,
+      name: `${user.firstName} ${user.lastName}`,
+    },
+    secretKey as string,
+    {
+      expiresIn: '3d',
+    }
+  );
 
   return {
     accessToken,
+    role: user.role,
   };
 };
 
