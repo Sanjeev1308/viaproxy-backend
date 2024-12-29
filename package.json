@@ -8,7 +8,8 @@
     "build": "tsc",
     "format": "prettier --write \"**/*.{ts,js,md,json}\" \"!**/node_modules/**\"",
     "lint": "eslint \"**/*.{ts,js,md,json}\" \"!**/node_modules/**\"",
-    "lint:fix": "eslint \"**/*.{ts,js,md,json}\" \"!**/node_modules/**\" --fix"
+    "lint:fix": "eslint \"**/*.{ts,js,md,json}\" \"!**/node_modules/**\" --fix",
+    "seed:admin": "ts-node src/seeds/admin.seed.ts"
   },
   "husky": {
     "hooks": {
