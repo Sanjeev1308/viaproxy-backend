@@ -4,6 +4,7 @@ import cors from 'cors';
 import express from 'express';
 import ExpressMongoSanitize from 'express-mongo-sanitize';
 import helmet from 'helmet';
+import path from 'path';
 import { corsOptions } from './config/corsOption';
 import { validateEnv } from './config/env.config';
 import { connectToDB } from './config/mongoose';
@@ -36,6 +37,7 @@ export const bootstrapExpress = (app: any) => {
   app.use(cors(corsOptions));
   app.use(cookieParser());
   app.use(bodyParser.urlencoded({ extended: true, limit: '30mb' }));
+  app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
   app.use('/api', apiRouter);
   app.use(notFoundMiddleware);
   app.use(errorHandlerMiddleware);

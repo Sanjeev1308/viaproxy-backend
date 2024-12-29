@@ -5,7 +5,7 @@ export interface IOffer extends Document {
   proposedItem: 'service' | 'product' | 'buy';
   concernedProductService?: string;
   description: string;
-  offerImage: string;
+  offerImage: string | File;
   offerStartDate: Date;
   offerEndDate: Date;
   exchangeType: 'exchange' | 'sale' | 'donate';
@@ -19,7 +19,7 @@ export interface IOffer extends Document {
   geographicArea: string;
   city: string;
   campus?: string;
-  specialConditionsFile?: string;
+  specialConditionsFile?: string | File;
   deliveryTermsDescription: string;
   termsAndConditions?: string;
   createdAt: Date;

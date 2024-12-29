@@ -1,4 +1,4 @@
-import { NextFunction } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { validateEnv } from '../config/env.config';
 import { ErrorCode } from '../errors/custom.error';
@@ -7,8 +7,8 @@ import { findUserById } from '../services/user.service';
 import { extractTokenfromHeader } from '../utils/helper.util';
 
 export const authenticate = async (
-  req: any & { user?: any },
-  res: any,
+  req: Request & { user?: any },
+  res: Response,
   next: NextFunction
 ) => {
   try {
@@ -23,11 +23,14 @@ export const authenticate = async (
     const decoded: any = jwt.verify(token, jwtconfig?.accessSecret || '');
     const user = await findUserById(decoded.userId);
 
-    if (!user) return res.status(401).json({ message: 'Invalid token' });
+    if (!user) {
+      res.status(401).json({ message: 'Invalid token' });
+    }
 
     req.user = user;
     next();
   } catch (error) {
     res.status(401).json({ message: 'Unauthorized' });
+    next(error);
   }
 };
