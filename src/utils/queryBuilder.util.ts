@@ -1,11 +1,11 @@
 import { Model } from 'mongoose';
 
 interface QueryOptions {
-  searchFields?: string[];
-  filters?: Record<string, any>;
-  sort?: string;
-  page?: number;
-  limit?: number;
+  searchFields?: string[]; // Fields to apply search on
+  filters?: Record<string, any>; // Additional filter conditions
+  sort?: string; // Sorting order
+  page?: number; // Current page
+  limit?: number; // Number of results per page
 }
 
 export const queryBuilder = async (
@@ -28,32 +28,33 @@ export const queryBuilder = async (
   if (query.search && searchFields.length > 0) {
     const searchRegex = new RegExp(query.search, 'i'); // Case-insensitive regex
     conditions.$or = searchFields.map((field) => ({
-      [field]: searchRegex,
+      [field]: { $regex: searchRegex },
     }));
   }
 
-  // Filtering logic
-  for (const [key, value] of Object.entries(filters)) {
-    if (query[key]) {
-      conditions[key] = query[key];
+  // Apply filters
+  Object.entries(filters).forEach(([key, value]) => {
+    if (value !== undefined) {
+      conditions[key] = value;
     }
-  }
+  });
 
   // Pagination
   const skip = (page - 1) * limit;
 
-  // Fetch data
-  const data = await model.find(conditions).sort(sort).skip(skip).limit(limit);
+  // Fetch data and total count in parallel for better performance
+  const [data, total] = await Promise.all([
+    model.find(conditions).sort(sort).skip(skip).limit(limit),
+    model.countDocuments(conditions),
+  ]);
 
-  // Count total documents matching conditions
-  const total = await model.countDocuments(conditions);
-
+  // Ensure the response includes meta details
   return {
     data,
     meta: {
-      total,
-      page,
-      pages: Math.ceil(total / limit),
+      total, // Total number of matching documents
+      page, // Current page number
+      pages: Math.ceil(total / limit), // Total number of pages
     },
   };
 };

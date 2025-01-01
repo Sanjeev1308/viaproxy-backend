@@ -2,7 +2,10 @@ import express from 'express';
 import {
   createOfferHandler,
   deleteOfferByIdHandler,
+  getAllOffersByTypeExpectMeHandler,
   getAllOffersHandler,
+  getMineOffersByTypeExpectMeHandler,
+  // getAllOffersByTypeExpectMeHandler,
   getOfferByIdHandler,
   updateOfferByIdHandler,
 } from '../controllers/offer.controller';
@@ -21,7 +24,11 @@ router.post(
   createOfferHandler
 );
 
-router.get('/', authenticate, getAllOffersHandler);
+router.get('/all', authenticate, getAllOffersHandler);
+
+router.get('/', authenticate, getAllOffersByTypeExpectMeHandler);
+
+router.get('/me', authenticate, getMineOffersByTypeExpectMeHandler);
 
 router.get('/:id', authenticate, getOfferByIdHandler);
 

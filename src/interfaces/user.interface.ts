@@ -11,6 +11,7 @@ export interface IUser extends Document {
   category?: string;
   isActive: boolean;
   emailVerified: boolean;
+  profilePicture?: string;
   otpCode: string;
   otpExpires: number;
   resetPasswordToken: string;

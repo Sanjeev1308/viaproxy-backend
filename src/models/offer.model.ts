@@ -34,12 +34,19 @@ const OfferSchema = new Schema(
         'delivered after payment',
       ],
     },
+    status: {
+      type: String,
+      required: true,
+      enum: ['pending', 'completed', 'expired', 'cancelled'],
+      default: 'pending',
+    },
     geographicArea: { type: String, required: true },
     city: { type: String, required: true },
     campus: { type: String },
     specialConditionsFile: { type: String }, // File URL for special conditions
     deliveryTermsDescription: { type: String, required: true },
     termsAndConditions: { type: String }, // This is for products only
+    createdBy: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   },
   { timestamps: true }
 );

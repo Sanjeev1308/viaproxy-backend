@@ -1,4 +1,4 @@
-import { Document } from 'mongoose';
+import mongoose, { Document } from 'mongoose';
 
 export interface IOffer extends Document {
   offerTitle: string;
@@ -22,6 +22,8 @@ export interface IOffer extends Document {
   specialConditionsFile?: string | File;
   deliveryTermsDescription: string;
   termsAndConditions?: string;
+  status: 'pending' | 'completed' | 'expired' | 'cancelled';
+  createdBy: mongoose.Types.ObjectId;
   createdAt: Date;
   updatedAt: Date;
 }

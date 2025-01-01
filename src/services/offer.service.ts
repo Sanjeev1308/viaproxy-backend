@@ -15,6 +15,38 @@ export async function findAllOffersWithQuery(query: any, queryOptions: any) {
   return await queryBuilder(OfferModel, query, queryOptions);
 }
 
+export async function findOffersByTypeExceptMyOwn(
+  createdBy: string,
+  exchangeType: string,
+  query: any,
+  queryOptions: any
+) {
+  const filters = {
+    ...queryOptions.filters,
+    exchangeType,
+    createdBy: { $ne: createdBy },
+  };
+  queryOptions.filters = filters;
+
+  return await queryBuilder(OfferModel, query, queryOptions);
+}
+
+export async function findMineOffersByType(
+  createdBy: string,
+  exchangeType: string,
+  query: any,
+  queryOptions: any
+) {
+  const filters = {
+    ...queryOptions.filters,
+    exchangeType,
+    createdBy: { $eq: createdBy },
+  };
+  queryOptions.filters = filters;
+
+  return await queryBuilder(OfferModel, query, queryOptions);
+}
+
 export async function findOfferById(id: string) {
   return await OfferModel.findById(id);
 }

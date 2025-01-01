@@ -3,8 +3,13 @@ import jwt from 'jsonwebtoken';
 import { validateEnv } from '../config/env.config';
 import { ErrorCode } from '../errors/custom.error';
 import UnAuthenticatedError from '../errors/unauthenticated.error';
+import { IUser } from '../interfaces/user.interface';
 import { findUserById } from '../services/user.service';
 import { extractTokenfromHeader } from '../utils/helper.util';
+
+export interface AuthRequest extends Request {
+  user?: IUser;
+}
 
 export const authenticate = async (
   req: Request & { user?: any },

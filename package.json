@@ -9,7 +9,8 @@
     "format": "prettier --write \"**/*.{ts,js,md,json}\" \"!**/node_modules/**\"",
     "lint": "eslint \"**/*.{ts,js,md,json}\" \"!**/node_modules/**\"",
     "lint:fix": "eslint \"**/*.{ts,js,md,json}\" \"!**/node_modules/**\" --fix",
-    "seed:admin": "ts-node src/seeds/admin.seed.ts"
+    "seed:admin": "ts-node src/seeds/admin.seed.ts",
+    "seed:user-and-offer": "ts-node src/seeds/user-and-offer.seed.ts"
   },
   "husky": {
     "hooks": {
@@ -27,6 +28,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@faker-js/faker": "^9.3.0",
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",

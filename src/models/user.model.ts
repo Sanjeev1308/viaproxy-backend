@@ -11,6 +11,7 @@ const UserSchema = new Schema<IUser>(
     city: { type: String, default: null },
     school: { type: String, default: null },
     category: { type: String, default: null },
+    profilePicture: { type: String, default: null },
     role: {
       type: String,
       enum: ['admin', 'student', 'eco-citizen', 'merchant'],

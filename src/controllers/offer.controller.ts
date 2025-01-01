@@ -2,15 +2,18 @@ import { Request, Response } from 'express';
 import { ErrorCode } from '../errors/custom.error';
 import InternalServerError from '../errors/internalServer.error';
 import NotFoundError from '../errors/notFound.error';
+import { AuthRequest } from '../middlewares/auth.middleware';
 import {
   createOffer,
   findAllOffersWithQuery,
   findAndDeleteOfferById,
+  findMineOffersByType,
   findOfferById,
+  findOffersByTypeExceptMyOwn,
   updateOfferById,
 } from '../services/offer.service';
 
-export const createOfferHandler = async (req: Request, res: Response) => {
+export const createOfferHandler = async (req: AuthRequest, res: Response) => {
   try {
     const offerData = req.body;
 
@@ -26,6 +29,7 @@ export const createOfferHandler = async (req: Request, res: Response) => {
       ...offerData,
       offerImage,
       specialConditionsFile,
+      createdBy: req.user?._id,
     });
 
     if (offer.error) {
@@ -40,11 +44,109 @@ export const createOfferHandler = async (req: Request, res: Response) => {
   }
 };
 
+export const getAllOffersByTypeExpectMeHandler = async (
+  req: AuthRequest,
+  res: Response
+) => {
+  try {
+    const {
+      search,
+      page,
+      limit,
+      proposedItem,
+      concernedProductService,
+      exchangeType,
+    } = req.query;
+
+    const filters: Record<string, any> = {
+      concernedProductService,
+      exchangeType,
+    };
+    if (proposedItem) {
+      filters.proposedItem = {
+        $in: (proposedItem as string).split(','),
+      };
+    }
+
+    const queryOptions = {
+      searchFields: ['offerTitle'],
+      filters,
+      sort: '-createdAt',
+      page: Number(page) || 1,
+      limit: Number(limit) || 10,
+      search,
+    };
+
+    const offers = await findOffersByTypeExceptMyOwn(
+      req.user?._id as any,
+      'exchange',
+      req.query,
+      queryOptions
+    );
+    res.status(200).json({
+      data: offers.data,
+      totaloffers: offers.meta.total,
+      totalPages: offers.meta.pages,
+      page: offers.meta.page,
+      success: true,
+    });
+  } catch (error) {
+    throw new InternalServerError(
+      'Failed to fetch offers',
+      ErrorCode.INTERNAL_SERVER
+    );
+  }
+};
+
+export const getMineOffersByTypeExpectMeHandler = async (
+  req: AuthRequest,
+  res: Response
+) => {
+  try {
+    const {
+      search,
+      page,
+      limit,
+      proposedItem,
+      concernedProductService,
+      exchangeType,
+    } = req.query;
+
+    const queryOptions = {
+      searchFields: ['offerTitle'],
+      filters: { proposedItem, concernedProductService, exchangeType },
+      sort: '-createdAt',
+      page: Number(page) || 1,
+      limit: Number(limit) || 10,
+      search,
+    };
+
+    const offers = await findMineOffersByType(
+      req.user?._id as any,
+      'exchange',
+      req.query,
+      queryOptions
+    );
+    res.status(200).json({
+      data: offers.data,
+      totaloffers: offers.meta.total,
+      totalPages: offers.meta.pages,
+      page: offers.meta.page,
+      success: true,
+    });
+  } catch (error) {
+    throw new InternalServerError(
+      'Failed to fetch offers',
+      ErrorCode.INTERNAL_SERVER
+    );
+  }
+};
+
 export const getAllOffersHandler = async (req: Request, res: Response) => {
   try {
     const { search, page, limit, role, isActive } = req.query;
     const queryOptions = {
-      searchFields: ['firstName', 'email'],
+      searchFields: ['offerTitle'],
       filters: { role, isActive },
       sort: '-createdAt',
       page: Number(page) || 1,
