@@ -53,6 +53,7 @@ export const getAllOffersByTypeExpectMeHandler = async (
       search,
       page,
       limit,
+      sort,
       proposedItem,
       concernedProductService,
       exchangeType,
@@ -60,7 +61,6 @@ export const getAllOffersByTypeExpectMeHandler = async (
 
     const filters: Record<string, any> = {
       concernedProductService,
-      exchangeType,
     };
     if (proposedItem) {
       filters.proposedItem = {
@@ -71,7 +71,7 @@ export const getAllOffersByTypeExpectMeHandler = async (
     const queryOptions = {
       searchFields: ['offerTitle'],
       filters,
-      sort: '-createdAt',
+      sort: sort || '-createdAt',
       page: Number(page) || 1,
       limit: Number(limit) || 10,
       search,
@@ -79,7 +79,7 @@ export const getAllOffersByTypeExpectMeHandler = async (
 
     const offers = await findOffersByTypeExceptMyOwn(
       req.user?._id as any,
-      'exchange',
+      exchangeType as string,
       req.query,
       queryOptions
     );
