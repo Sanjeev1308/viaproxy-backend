@@ -4,6 +4,7 @@ import {
   deleteCategoryByIdHandler,
   getAllCategoryHandler,
   getCategoryByIdHandler,
+  getSubCategoriesByCategoryIdHandler,
   updateCategoryByIdHandler,
 } from '../controllers/category.controller';
 import { authenticate } from '../middlewares/auth.middleware';
@@ -15,6 +16,12 @@ router.post('/category', authenticate, createCategoryHandler);
 router.get('/', authenticate, getAllCategoryHandler);
 
 router.get('/:id', authenticate, getCategoryByIdHandler);
+
+router.get(
+  '/:id/sub-category',
+  authenticate,
+  getSubCategoriesByCategoryIdHandler
+);
 
 router.patch('/:id', authenticate, updateCategoryByIdHandler);
 

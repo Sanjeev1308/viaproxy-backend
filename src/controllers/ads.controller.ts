@@ -12,9 +12,20 @@ import {
 
 export const createAdsHandler = async (req: Request, res: Response) => {
   try {
-    const AdsData = req.body;
+    const adsData = req.body;
 
-    const ads = await createAds(AdsData);
+    const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+
+    const zone1Image = files['zone1Image']?.[0]?.path;
+    const zone2Image = files['zone2Image']?.[0]?.path;
+    const zone3Image = files['zone3Image']?.[0]?.path;
+
+    const ads = await createAds({
+      ...adsData,
+      zone1Image,
+      zone2Image,
+      zone3Image,
+    });
 
     if (ads.error) {
       res.status(400).json({ message: ads.error, sucess: false });

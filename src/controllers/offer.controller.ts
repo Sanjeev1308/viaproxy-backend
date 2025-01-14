@@ -123,7 +123,7 @@ export const getMineOffersByTypeExpectMeHandler = async (
 
     const offers = await findMineOffersByType(
       req.user?._id as any,
-      'exchange',
+      exchangeType as string,
       req.query,
       queryOptions
     );

@@ -14,7 +14,11 @@ export const createServiceHandler = async (req: Request, res: Response) => {
   try {
     const serviceData = req.body;
 
-    const services = await createService(serviceData);
+    const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+
+    const image = files['image']?.[0]?.path;
+
+    const services = await createService({ ...serviceData, image });
 
     if (services.error) {
       res.status(400).json({ message: services.error, sucess: false });

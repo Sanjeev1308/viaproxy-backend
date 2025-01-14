@@ -1,10 +1,11 @@
 import { model, Schema } from 'mongoose';
+import { IProposal } from '../interfaces/proposal.interface';
 
-const ProposalSchema = new Schema(
+const ProposalSchema = new Schema<IProposal>(
   {
     offer: { type: Schema.Types.ObjectId, ref: 'Offer', required: true },
     proposer: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-    proposedOffer: { type: Schema.Types.ObjectId, ref: 'Offer' },
+    message: { type: String, required: true },
     status: {
       type: String,
       required: true,
@@ -15,4 +16,4 @@ const ProposalSchema = new Schema(
   { timestamps: true }
 );
 
-export default model('Proposal', ProposalSchema);
+export default model<IProposal>('Proposal', ProposalSchema);

@@ -14,7 +14,11 @@ export const createProductHandler = async (req: Request, res: Response) => {
   try {
     const productData = req.body;
 
-    const products = await createProduct(productData);
+    const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+
+    const image = files['image']?.[0]?.path;
+
+    const products = await createProduct({ ...productData, image });
 
     if (products.error) {
       res.status(400).json({ message: products.error, sucess: false });

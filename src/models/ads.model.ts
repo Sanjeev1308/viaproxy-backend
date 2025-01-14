@@ -28,46 +28,30 @@ const AdsSchema = new Schema<IAds>(
       type: Date,
       required: true,
     },
-    advertisingAreas: {
-      zone1: {
-        type: Boolean,
-        default: false,
-      },
-      zone2: {
-        type: Boolean,
-        default: false,
-      },
-      zone3: {
-        type: Boolean,
-        default: false,
-      },
-      zone1Image: {
-        type: String,
-        required: function () {
-          return this.advertisingAreas.zone1;
-        },
-      },
-      zone2Image: {
-        type: String,
-        required: function () {
-          return this.advertisingAreas.zone2;
-        },
-      },
-      zone3Image: {
-        type: String,
-        required: function () {
-          return this.advertisingAreas.zone3;
-        },
-      },
+    zone1: {
+      type: Boolean,
+      default: false,
     },
-    geographicArea: {
+    zone2: {
+      type: Boolean,
+      default: false,
+    },
+    zone3: {
+      type: Boolean,
+      default: false,
+    },
+    zone1Image: {
       type: String,
-      required: false,
     },
-    city: {
+    zone2Image: {
       type: String,
-      required: false,
     },
+    zone3Image: {
+      type: String,
+    },
+
+    country: { type: String, default: '' },
+    city: { type: String, default: '' },
   },
   { timestamps: true }
 );

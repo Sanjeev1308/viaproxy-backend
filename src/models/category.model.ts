@@ -11,6 +11,16 @@ const CategorySchema = new Schema<ICategory>(
     },
     name: { type: String, required: true },
     description: { type: String, default: '' },
+    parentCategoryId: {
+      type: Schema.Types.ObjectId,
+      ref: 'Category',
+    },
+    isSubcategory: {
+      type: Boolean,
+      default: false,
+    },
+    country: { type: String, default: '' },
+    city: { type: String, default: '' },
   },
   { timestamps: true }
 );

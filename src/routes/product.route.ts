@@ -7,16 +7,27 @@ import {
   updateProductByIdHandler,
 } from '../controllers/product.controller';
 import { authenticate } from '../middlewares/auth.middleware';
+import upload from '../utils/multer.util';
 
 const router = express.Router();
 
-router.post('/product', authenticate, createProductHandler);
+router.post(
+  '/product',
+  authenticate,
+  upload.fields([{ name: 'image', maxCount: 1 }]),
+  createProductHandler
+);
 
 router.get('/', authenticate, getAllProductsHandler);
 
 router.get('/:id', authenticate, getProductByIdHandler);
 
-router.patch('/:id', authenticate, updateProductByIdHandler);
+router.patch(
+  '/:id',
+  authenticate,
+  upload.fields([{ name: 'image', maxCount: 1 }]),
+  updateProductByIdHandler
+);
 
 router.delete('/:id', authenticate, deleteProductByIdHandler);
 

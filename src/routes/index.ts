@@ -6,6 +6,7 @@ import conversationRoute from './conversation.route';
 import messageRoute from './message.route';
 import offerRoute from './offer.route';
 import productsRoute from './product.route';
+import proposalsRoute from './proposals.route';
 import servicesRoute from './service.route';
 import userRoute from './user.route';
 
@@ -20,6 +21,7 @@ router.use('/products', productsRoute);
 router.use('/services', servicesRoute);
 router.use('/categories', categoriesRoute);
 router.use('/ads', adsRoute);
+router.use('/proposals', proposalsRoute);
 
 router.get('/', (req, res) => {
   res.json({

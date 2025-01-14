@@ -7,14 +7,12 @@ export interface IAds extends Document {
   concernedProductService?: string;
   adsStartDate: Date;
   adsEndDate: Date;
-  advertisingAreas?: {
-    zone1: boolean;
-    zone2: boolean;
-    zone3: boolean;
-    zone1Image?: string;
-    zone2Image?: string;
-    zone3Image?: string;
-  };
-  geographicArea?: string;
+  zone1?: boolean;
+  zone2?: boolean;
+  zone3?: boolean;
+  zone1Image?: string;
+  zone2Image?: string;
+  zone3Image?: string;
+  country?: string;
   city?: string;
 }

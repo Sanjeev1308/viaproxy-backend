@@ -6,6 +6,7 @@ interface QueryOptions {
   sort?: string; // Sorting order
   page?: number; // Current page
   limit?: number; // Number of results per page
+  populate?: string[];
 }
 
 export const queryBuilder = async (
@@ -19,6 +20,7 @@ export const queryBuilder = async (
     sort = '-createdAt',
     page = 1,
     limit = 10,
+    populate = [],
   } = options;
 
   // Initialize query conditions
@@ -44,7 +46,12 @@ export const queryBuilder = async (
 
   // Fetch data and total count in parallel for better performance
   const [data, total] = await Promise.all([
-    model.find(conditions).sort(sort).skip(skip).limit(limit),
+    model
+      .find(conditions)
+      .sort(sort)
+      .skip(skip)
+      .limit(limit)
+      .populate(populate),
     model.countDocuments(conditions),
   ]);
 
