@@ -1,15 +1,23 @@
 import ConversationModel from '../models/conversation.model';
 
 export const createConversation = async (data: any) => {
-  const conversation = new ConversationModel(data);
-  return await conversation.save();
+  try {
+    const conversation = new ConversationModel(data);
+    return await conversation.save();
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export const getConversationsByUser = async (userId: string) => {
-  return await ConversationModel.find({ participants: userId })
-    .populate('participants', 'name email') // Populate participants' details
-    .populate('lastMessage', 'content createdAt') // Populate last message details
-    .sort({ updatedAt: -1 });
+  try {
+    return await ConversationModel.find({ participants: userId })
+      .populate('participants', 'name email') // Populate participants' details
+      .populate('lastMessage', 'content createdAt') // Populate last message details
+      .sort({ updatedAt: -1 });
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export const getConversationById = async (id: string) => {

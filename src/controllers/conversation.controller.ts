@@ -51,6 +51,7 @@ export const getConversationsHandler = async (
       message: 'Conversations fetched successfully',
     });
   } catch (error) {
+    console.log(error);
     throw new InternalServerError(
       `Failed to fetch `,
       ErrorCode.INTERNAL_SERVER
