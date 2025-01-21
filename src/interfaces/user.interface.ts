@@ -7,8 +7,10 @@ export interface IUser extends Document {
   lastName: string;
   country?: string;
   city?: string;
-  school?: string;
-  category?: string;
+  status?: string;
+  designationSchool?: string;
+  categorySchool?: string;
+  implementation?: string;
   isActive: boolean;
   emailVerified: boolean;
   profilePicture?: string;

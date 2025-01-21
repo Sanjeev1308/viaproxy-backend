@@ -43,6 +43,7 @@ export const getAllProductsHandler = async (req: Request, res: Response) => {
       page: Number(page) || 1,
       limit: Number(limit) || 10,
       search,
+      populate: ['productCategoryId', 'productSubCategoryId'],
     };
 
     const products = await findAllProductsWithQuery(req.query, queryOptions);

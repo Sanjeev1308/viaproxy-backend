@@ -8,9 +8,11 @@ const UserSchema = new Schema<IUser>(
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     country: { type: String, default: null },
+    status: { type: String, default: '' },
     city: { type: String, default: null },
-    school: { type: String, default: null },
-    category: { type: String, default: null },
+    designationSchool: { type: String, default: null },
+    categorySchool: { type: String, default: null },
+    implementation: { type: String, default: null },
     profilePicture: { type: String, default: null },
     role: {
       type: String,

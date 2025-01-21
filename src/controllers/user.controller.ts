@@ -40,7 +40,7 @@ export const getAllUsersHandler = async (req: Request, res: Response) => {
   try {
     const { search, page, limit, role, isActive } = req.query;
     const queryOptions = {
-      searchFields: ['firstName', 'email'],
+      searchFields: ['firstName', 'lastName', 'email'],
       filters: { role, isActive },
       sort: '-createdAt',
       page: Number(page) || 1,
@@ -74,7 +74,7 @@ export const getAllUsersAdvanceSearchHandler = async (
   try {
     const { search, page, limit, role, isActive } = req.body;
     const queryOptions = {
-      searchFields: ['firstName', 'email'],
+      searchFields: ['firstName', 'lastName', 'email'],
       filters: { role, isActive, _id: { $ne: req.user?._id as any } },
       sort: '-createdAt',
       page: Number(page) || 1,
