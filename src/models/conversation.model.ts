@@ -3,29 +3,12 @@ import { IConversation } from '../interfaces/conversation.interface';
 
 const ConversationSchema = new Schema<IConversation>(
   {
-    participants: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'User',
-        required: true,
-      },
-    ],
-    lastMessage: {
-      type: Schema.Types.ObjectId,
-      ref: 'Message',
-    },
-    title: {
-      type: String,
-    },
-    createdBy: {
-      type: Schema.Types.ObjectId,
-      ref: 'User',
-      required: true,
-    },
+    participants: [{ type: String, required: true }],
+    lastMessage: { type: String },
+    unreadCount: { type: Map, of: Number, default: {} },
+    updatedAt: { type: Date, default: Date.now },
   },
   { timestamps: true }
 );
-
-ConversationSchema.index({ participants: 1 });
 
 export default model('Conversation', ConversationSchema);

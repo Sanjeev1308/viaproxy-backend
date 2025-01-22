@@ -1,15 +1,18 @@
 import express from 'express';
 import {
-  createMessageHandler,
-  getMessagesHandler,
-  markMessageAsReadHandler,
+  createConversation,
+  getConversations,
+  getMessages,
+  markMessagesAsRead,
+  sendMessage,
 } from '../controllers/message.controller';
 
 const router = express.Router();
 
-// router.get('/', authenticate, getAllMineMessagesHandler); // Get All messages
-router.post('/', createMessageHandler); // Create a new message
-router.get('/:conversationId', getMessagesHandler); // Get messages for a conversation
-router.patch('/:messageId/read', markMessageAsReadHandler); // Mark a message as read
+router.get('/conversations/:userId', getConversations);
+router.get('/messages/:conversationId', getMessages);
+router.post('/send', sendMessage);
+router.post('/conversations', createConversation);
+router.put('/messages/read/:conversationId', markMessagesAsRead);
 
 export default router;

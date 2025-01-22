@@ -2,10 +2,9 @@ import mongoose, { Document } from 'mongoose';
 
 export interface IMessage extends Document {
   conversationId: mongoose.Types.ObjectId;
-  sender: mongoose.Types.ObjectId;
+  sender: string;
+  receiver: string;
   content: string;
-  readBy: mongoose.Types.ObjectId[];
-  attachments?: string[];
+  isRead: boolean;
   createdAt: Date;
-  updatedAt: Date;
 }

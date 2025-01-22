@@ -1,101 +1,63 @@
 import { Request, Response } from 'express';
-import { ErrorCode } from '../errors/custom.error';
-import InternalServerError from '../errors/internalServer.error';
-import {
-  createMessage,
-  getMessagesByConversationId,
-  markMessageAsRead,
-} from '../services/message.service';
+import { MessageService } from '../services/message.service';
 
-export const createMessageHandler = async (req: Request, res: Response) => {
+const messageService = new MessageService();
+
+export const createConversation = async (req: Request, res: Response) => {
   try {
-    const message = await createMessage(req.body);
-    if (message.error) {
-      res
-        .status(400)
-        .json({ message: 'Not able to send message', sucess: false });
-    }
-    res.status(201).json({
-      data: message,
-      success: true,
-      message: 'Message created successfully',
-    });
-  } catch (error) {
-    throw new InternalServerError(
-      `Failed to fetch `,
-      ErrorCode.INTERNAL_SERVER
+    const { participant1, participant2 } = req.body;
+    const conversation = await messageService.createConversation(
+      participant1,
+      participant2
     );
+    res.status(201).json(conversation);
+  } catch (error) {
+    res.status(500).json({ error: 'Error creating conversation' + error });
   }
 };
 
-// export const getAllMineMessagesHandler = async (
-//   req: AuthRequest,
-//   res: Response
-// ) => {
-//   try {
-//     const { search, page, limit } = req.query;
-
-//     const queryOptions = {
-//       searchFields: ['sender'],
-//       filters: {},
-//       sort: '-createdAt',
-//       page: Number(page) || 1,
-//       limit: Number(limit) || 1000,
-//       search,
-//     };
-
-//     const messages = await findAllMineMessages(
-//       req.user?._id as any,
-//       req.query,
-//       queryOptions
-//     );
-//     res.status(200).json({
-//       data: messages.data,
-//       totalMessages: messages.meta.total,
-//       totalPages: messages.meta.pages,
-//       page: messages.meta.page,
-//       success: true,
-//     });
-//   } catch (error) {
-//     throw new InternalServerError(
-//       'Failed to fetch offers',
-//       ErrorCode.INTERNAL_SERVER
-//     );
-//   }
-// };
-
-export const getMessagesHandler = async (req: Request, res: Response) => {
+export const markMessagesAsRead = async (req: Request, res: Response) => {
   try {
     const { conversationId } = req.params;
-    const { page = 1, limit = 10 } = req.query;
-    const messages = await getMessagesByConversationId(
+    const { userId } = req.body;
+    const result = await messageService.markMessagesAsRead(
       conversationId,
-      Number(page),
-      Number(limit)
+      userId
     );
-    res.status(200).json({
-      data: messages.data,
-      totalMessages: messages.meta.total,
-      totalPages: messages.meta.pages,
-      page: messages.meta.page,
-      success: true,
-    });
+
+    res.json({ success: true });
   } catch (error) {
-    throw new InternalServerError(`Failed to fetch`, ErrorCode.INTERNAL_SERVER);
+    res.status(500).json({ error: 'Error marking messages as read' });
   }
 };
 
-export const markMessageAsReadHandler = async (req: Request, res: Response) => {
+export const getConversations = async (req: Request, res: Response) => {
   try {
-    const { messageId } = req.params;
-    const { userId } = req.body; // Assume `userId` is provided in the request body
-    const updatedMessage = await markMessageAsRead(messageId, userId);
-    res.status(200).json({
-      data: updatedMessage,
-      success: true,
-      message: 'Message marked as read',
-    });
+    const { userId } = req.params;
+    const conversations = await messageService.getConversations(userId);
+    res.json(conversations);
   } catch (error) {
-    throw new InternalServerError(`Failed to fetch`, ErrorCode.INTERNAL_SERVER);
+    res.status(500).json({ error: 'Error fetching conversations' });
+  }
+};
+
+export const getMessages = async (req: Request, res: Response) => {
+  try {
+    const { conversationId } = req.params;
+    const messages = await messageService.getMessages(conversationId);
+
+    res.json(messages);
+  } catch (error) {
+    res.status(500).json({ error: 'Error fetching messages' });
+  }
+};
+
+export const sendMessage = async (req: Request, res: Response) => {
+  try {
+    const { sender, receiver, content } = req.body;
+    const message = await messageService.sendMessage(sender, receiver, content);
+    res.json(message);
+  } catch (error) {
+    res.status(500).json({ error: 'Error sending message' + error });
   }
 };

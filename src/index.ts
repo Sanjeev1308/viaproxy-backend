@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 // import { Server as SocketServer } from 'socket.io';
 import { bootstrap } from './app';
 import { validateEnv } from './config/env.config';
+import { initializeSocket } from './config/socket';
 // import ConversationModel from './models/conversation.model';
 // import MessageModel from './models/message.model';
 
@@ -106,6 +107,8 @@ const startServer = async () => {
   //     console.log('User disconnected:', socket.id);
   //   });
   // });
+
+  const io = initializeSocket(httpServer);
 
   const server: Server = httpServer.listen(port, () => {
     // logger.info(`server listening on port ${port}`);
