@@ -3,7 +3,13 @@ import { IConversation } from '../interfaces/conversation.interface';
 
 const ConversationSchema = new Schema<IConversation>(
   {
-    participants: [{ type: String, required: true }],
+    participants: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        required: true,
+      },
+    ],
     lastMessage: { type: String },
     unreadCount: { type: Map, of: Number, default: {} },
     updatedAt: { type: Date, default: Date.now },

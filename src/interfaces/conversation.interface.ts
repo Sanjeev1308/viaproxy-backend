@@ -1,7 +1,7 @@
-import { Document } from 'mongoose';
+import mongoose, { Document } from 'mongoose';
 
 export interface IConversation extends Document {
-  participants: string[];
+  participants: mongoose.Types.ObjectId[];
   lastMessage?: string;
   unreadCount: { [key: string]: number };
   updatedAt: Date;

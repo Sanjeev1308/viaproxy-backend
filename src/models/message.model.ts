@@ -3,8 +3,16 @@ import { IMessage } from '../interfaces/message.interface';
 
 const MessageSchema = new Schema<IMessage>(
   {
-    sender: { type: String, required: true },
-    receiver: { type: String, required: true },
+    sender: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
+    },
+    receiver: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
+    },
     content: { type: String, required: true },
     conversationId: {
       type: Schema.Types.ObjectId,

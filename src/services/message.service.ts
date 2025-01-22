@@ -93,9 +93,12 @@ export class MessageService {
 
   async getMessages(conversationId: string) {
     try {
-      const messages = await Message.find({ conversationId }).sort({
-        createdAt: 1,
-      });
+      const messages = await Message.find({ conversationId })
+        .sort({
+          createdAt: 1,
+        })
+        .populate('receiver', 'firstName lastName email profilePicture')
+        .populate('sender', 'firstName lastName email profilePicture');
       return messages;
     } catch (error) {
       throw new Error('Error fetching messages');
@@ -106,7 +109,9 @@ export class MessageService {
     try {
       const conversations = await Conversation.find({
         participants: { $in: [userId] },
-      }).sort({ updatedAt: -1 });
+      })
+        .sort({ updatedAt: -1 })
+        .populate('participants', 'firstName lastName email profilePicture');
       return conversations;
     } catch (error) {
       throw new Error('Error fetching conversations');

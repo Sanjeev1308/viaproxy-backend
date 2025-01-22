@@ -1,4 +1,5 @@
 import { Server as HttpServer } from 'http';
+import { Types } from 'mongoose';
 import { Server } from 'socket.io';
 import Conversation from '../models/conversation.model';
 import { MessageService } from '../services/message.service';
@@ -15,7 +16,7 @@ export const initializeSocket = (httpServer: HttpServer) => {
   });
 
   // Store connected users
-  const connectedUsers = new Map<string, string>();
+  const connectedUsers = new Map<any, any>();
 
   io.on('connection', (socket) => {
     console.log('User connected:', socket.id);
@@ -66,7 +67,8 @@ export const initializeSocket = (httpServer: HttpServer) => {
           const conversation = await Conversation.findById(data.conversationId);
           if (conversation) {
             conversation.participants.forEach((participantId) => {
-              if (participantId !== data.userId) {
+              const userObjectId = new Types.ObjectId(data.userId);
+              if (participantId !== userObjectId) {
                 const participantSocketId = connectedUsers.get(participantId);
                 if (participantSocketId) {
                   io.to(participantSocketId).emit('messages_read', {
